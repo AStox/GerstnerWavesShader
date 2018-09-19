@@ -40,16 +40,7 @@
 			float4 _Color2;
 			float4 _MainTex_ST;
 			
-			float3 Gerstner(float a, float b, float c , float k)
-			{
-				float t = _Time;
-				float e = 2.71828;
-				float x = a + ((pow(e,k*b)/k) * sin(k*(a+c*t)));
-				float z = b - ((pow(e,k*b)/k) * cos(k*(a+c*t)));
-				return float3(x-a,0,z-b);
-			}
-
-			float3 Rotate(float3 pos, float degrees)
+			float4 Rotate(float4 pos, float degrees)
 			{
 				float sinX = sin ( degrees * 1/180 * 3.14159 );
 				float cosX = cos ( degrees * 1/180 * 3.14159 );
@@ -58,14 +49,26 @@
 				return pos;
 			}
 
+			float3 Gerstner(float a, float b, float c , float k)
+			{
+
+				float t = _Time;
+				float e = 2.71828;
+				float x = a + ((pow(e,k*b)/k) * sin(k*(a+c*t)));
+				float z = b - ((pow(e,k*b)/k) * cos(k*(a+c*t)));
+				
+				return float3(x-a,0,z-b);
+			}
+
+
 			v2f vert (appdata v)
 			{
 				v2f o;
-				float3 pos = mul(unity_ObjectToWorld, v.vertex);
-				pos.y = 0;
-				float3 offset = Gerstner(Rotate(pos, 45).x,-1.5,10,2);
-								// + Gerstner(Rotate(pos, 12).x,-.01,0.6,2)
-								// + Gerstner(Rotate(pos, 24).x,-0.01,0.2,12); 
+				// v.vertex.xyz = ;
+				// float3 pos = ;
+				float3 offset = Gerstner(mul(unity_ObjectToWorld, Rotate(v.vertex,20)).x,-7.5,50,0.5) +
+								Gerstner(mul(unity_ObjectToWorld, Rotate(v.vertex,10)).x,-1.6,1,3) +
+								Gerstner(mul(unity_ObjectToWorld, Rotate(v.vertex,30)).x,-2.4,25,1.5);
 				v.vertex.xyz += offset;
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
