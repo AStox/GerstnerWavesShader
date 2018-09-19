@@ -46,7 +46,7 @@
 				float e = 2.71828;
 				float x = a + ((pow(e,k*b)/k) * sin(k*(a+c*t)));
 				float z = b - ((pow(e,k*b)/k) * cos(k*(a+c*t)));
-				return float3(x-a,0,z);
+				return float3(x-a,0,z-b);
 			}
 
 			float3 Rotate(float3 pos, float degrees)
@@ -61,9 +61,11 @@
 			v2f vert (appdata v)
 			{
 				v2f o;
-				float3 offset = Gerstner(Rotate(v.vertex, 20).x,-.07,3,12)
-								+ Gerstner(Rotate(v.vertex, 12).x,-.01,0.6,42) * 0.5
-								+ Gerstner(Rotate(v.vertex, 24).x,-0.01,0.2,60)*0.3; 
+				float3 pos = mul(unity_ObjectToWorld, v.vertex);
+				pos.y = 0;
+				float3 offset = Gerstner(Rotate(pos, 45).x,-1.5,10,2);
+								// + Gerstner(Rotate(pos, 12).x,-.01,0.6,2)
+								// + Gerstner(Rotate(pos, 24).x,-0.01,0.2,12); 
 				v.vertex.xyz += offset;
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
