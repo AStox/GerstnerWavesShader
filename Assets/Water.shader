@@ -42,6 +42,7 @@
 			
 			float4 Rotate(float4 pos, float degrees)
 			{
+				// pos = mul(unity_ObjectToWorld, Rotate(v.
 				float sinX = sin ( degrees * 1/180 * 3.14159 );
 				float cosX = cos ( degrees * 1/180 * 3.14159 );
 				float2x2 rotationMatrix = float2x2( cosX, -sinX, sinX, cosX);
@@ -66,9 +67,10 @@
 				v2f o;
 				// v.vertex.xyz = ;
 				// float3 pos = ;
-				float3 offset = Gerstner(mul(unity_ObjectToWorld, Rotate(v.vertex,20)).x,-7.5,50,0.5) +
-								Gerstner(mul(unity_ObjectToWorld, Rotate(v.vertex,10)).x,-1.6,1,3) +
-								Gerstner(mul(unity_ObjectToWorld, Rotate(v.vertex,30)).x,-2.4,25,1.5);
+				// float3 offset = Gerstner(mul(unity_ObjectToWorld, Rotate(v.vertex,0)).x,-7.5,50,0.5); 
+				float3 offset = Gerstner(mul(unity_ObjectToWorld,v.vertex).x + mul(unity_ObjectToWorld, v.vertex).z,-8.5,50,0.5) +
+								Gerstner(mul(unity_ObjectToWorld, v.vertex).x + mul(unity_ObjectToWorld, v.vertex).z,-1.3,1,3) +
+								Gerstner(mul(unity_ObjectToWorld, v.vertex).x + mul(unity_ObjectToWorld, v.vertex).z,-2.9,25,1.5);
 				v.vertex.xyz += offset;
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
