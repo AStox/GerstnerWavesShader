@@ -68,11 +68,12 @@
 				// v.vertex.xyz = ;
 				// float3 pos = ;
 				// float3 offset = Gerstner(mul(unity_ObjectToWorld, Rotate(v.vertex,0)).x,-7.5,50,0.5); 
-				float3 offset = Gerstner(mul(unity_ObjectToWorld,v.vertex).x + mul(unity_ObjectToWorld, v.vertex).z,-25.5,50,0.2) +
-								Gerstner(mul(unity_ObjectToWorld, v.vertex).x + mul(unity_ObjectToWorld, v.vertex).z *1.5,-4.3,1,1) +
-								Gerstner(mul(unity_ObjectToWorld, v.vertex).x + mul(unity_ObjectToWorld, v.vertex).z* 0.7,-3.9,25,0.9);
+				float3 offset = Gerstner(mul(unity_ObjectToWorld,v.vertex).x + mul(unity_ObjectToWorld, v.vertex).z *0,-25,100,0.2) +
+								Gerstner(mul(unity_ObjectToWorld, v.vertex).x + mul(unity_ObjectToWorld, v.vertex).z *0.15,-11,25,0.5) +
+								Gerstner(mul(unity_ObjectToWorld, v.vertex).x + mul(unity_ObjectToWorld, v.vertex).z *-0.1,-3.5,5,1.4);
 
-				// TODO: Scale wave height by distance to camera
+				float3 dist = smoothstep(length(v.vertex - float4(0.5,0.5,0,0)),0.,5.);
+				offset *= (1-dist);
 				v.vertex.xyz += offset;
 				o.vertex = UnityObjectToClipPos(v.vertex);
 				o.uv = TRANSFORM_TEX(v.uv, _MainTex);
